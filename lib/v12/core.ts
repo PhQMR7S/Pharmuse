@@ -31,3 +31,11 @@ export function advanceCase(c:ClinicalCase,s:CaseSession,answer?:Answer):CaseSes
  return {...s,answers:step.question?{...s.answers,[step.id]:structuredClone(answer!)}:s.answers,checked:[...new Set([...s.checked,step.id])],cursor:Math.min(s.cursor+1,c.stages.length-1),completed:s.cursor===c.stages.length-1};
 }
 export function bankStats(state:BankState,items:BankItem[]){const latest=items.map(i=>[...state.attempts].reverse().find(a=>a.itemId===i.id)).filter((a):a is Attempt=>!!a);return {answered:latest.length,correct:latest.filter(a=>a.correct).length,total:items.length};}
+export type BankExam={id:string;itemIds:string[];answers:Record<string,Answer>;submittedAt?:number;score?:number};
+export function createExam(id:string,items:BankItem[]):BankExam{return {id,itemIds:[...new Set(items.map(i=>i.id))],answers:{}}}
+export function answerExam(exam:BankExam,items:BankItem[],itemId:string,answer:Answer):BankExam{const item=items.find(i=>i.id===itemId);if(exam.submittedAt!==undefined||!exam.itemIds.includes(itemId)||!item||!validAnswer(item.question,answer))return exam;return {...exam,answers:{...exam.answers,[itemId]:structuredClone(answer)}}}
+export function submitExam(exam:BankExam,items:BankItem[],at:number):BankExam{
+ if(exam.submittedAt!==undefined||!Number.isFinite(at)||at<0||!exam.itemIds.length)return exam;
+ const selected=exam.itemIds.map(id=>items.find(i=>i.id===id));if(selected.some(i=>!i||!validAnswer(i.question,exam.answers[i.id])))return exam;
+ return {...exam,submittedAt:at,score:Math.round(selected.filter(i=>i&&grade(i.question,exam.answers[i.id])).length/selected.length*100)};
+}
