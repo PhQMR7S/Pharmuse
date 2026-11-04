@@ -5,3 +5,5 @@ out/
 !.env.example
 *.tsbuildinfo
 .DS_Store
+# Private connected scientific-library metadata must not be published.
+data/source-inventory.json
