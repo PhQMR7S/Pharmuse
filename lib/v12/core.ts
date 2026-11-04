@@ -27,7 +27,7 @@ export type ClinicalCase={id:string;title:Bilingual;stages:CaseStage[];review?:R
 export type CaseSession={caseId:string;cursor:number;answers:Record<string,Answer>;checked:string[];completed:boolean};
 export function startCase(c:ClinicalCase):CaseSession{return {caseId:c.id,cursor:0,answers:{},checked:[],completed:false}}
 export function advanceCase(c:ClinicalCase,s:CaseSession,answer?:Answer):CaseSession{
- if(s.caseId!==c.id||s.completed)return s;const step=c.stages[s.cursor];if(!step||(step.question&&!validAnswer(step.question,answer)))return s;
+ if(s.caseId!==c.id||s.completed||!Number.isInteger(s.cursor)||s.cursor<0||c.stages.slice(0,s.cursor).some(step=>!s.checked.includes(step.id)))return s;const step=c.stages[s.cursor];if(!step||(step.question&&!validAnswer(step.question,answer)))return s;
  return {...s,answers:step.question?{...s.answers,[step.id]:structuredClone(answer!)}:s.answers,checked:[...new Set([...s.checked,step.id])],cursor:Math.min(s.cursor+1,c.stages.length-1),completed:s.cursor===c.stages.length-1};
 }
 export function bankStats(state:BankState,items:BankItem[]){const latest=items.map(i=>[...state.attempts].reverse().find(a=>a.itemId===i.id)).filter((a):a is Attempt=>!!a);return {answered:latest.length,correct:latest.filter(a=>a.correct).length,total:items.length};}
