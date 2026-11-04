@@ -50,3 +50,5 @@ body{background:radial-gradient(ellipse at 85% 0%,#fbe1fa 0,transparent 45%),#f8
 @media(max-width:520px){.mascot-coach{padding:9px;gap:5px}.mascot-coach>button{width:75px!important}.mascot-coach-message p{font-size:.84rem}.coach-name{font-size:.7rem}}
 
 .review-explainer{padding:13px 16px;background:#f3eaff;border-radius:14px;line-height:1.6}.review-pill{display:inline-flex;background:#e6f8ed;color:#17623b;font-weight:800;border-radius:20px;padding:7px 12px;font-size:.76rem;margin:6px}.dark .review-explainer{background:#38254e}.dark .review-pill{background:#234638;color:#d4fce7}
+
+.review-summary{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}.review-summary span{padding:12px 15px;border-radius:15px;background:#f2e8ff;color:#5e2da3;font-weight:800}.dark .review-summary span{background:#402c57;color:#e5d3ff}
