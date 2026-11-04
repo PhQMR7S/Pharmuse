@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {emptyState,sanitizeState,recordAttempt,finishLesson,dueReviews} from '../lib/learning';
+test('forged ids and XP are discarded',()=>assert.deepEqual(sanitizeState({completed:['fake','receptors','receptors'],xp:90000}).completed,['receptors']));
+test('cannot unlock or award without a correct attempt',()=>assert.equal(finishLesson(emptyState,'receptors').xp,0));
+test('replayed completion and attempt identifiers do not duplicate rewards or spacing',()=>{const a={id:'one',lessonId:'receptors',correct:true,at:100};const s=recordAttempt(emptyState,a);assert.deepEqual(recordAttempt(s,a),s);const done=finishLesson(s,'receptors');assert.equal(done.xp,20);assert.equal(finishLesson(done,'receptors').xp,20)});
+test('wrong answers are due immediately including incomplete lessons',()=>{const s=recordAttempt(emptyState,{id:'wrong',lessonId:'receptors',correct:false,at:100});assert.equal(dueReviews(s,100).length,1);assert.equal(s.xp,0)});
+test('review intervals progress 1, 3, 6 days and reset on errors',()=>{let s=emptyState;for(let i=0;i<3;i++)s=recordAttempt(s,{id:String(i),lessonId:'receptors',correct:true,at:i});assert.equal(s.reviews[0].interval,6);s=recordAttempt(s,{id:'fail',lessonId:'receptors',correct:false,at:10});assert.equal(s.reviews[0].interval,0)});
+test('locked lessons cannot be completed out of order',()=>{const s=recordAttempt(emptyState,{id:'beta',lessonId:'beta',correct:true,at:100});assert.equal(finishLesson(s,'beta').xp,0)});
+test('corrupt saved state is safe',()=>{assert.equal(sanitizeState(null).xp,0);assert.equal(sanitizeState({reviews:[{}],attempts:[{}]}).reviews.length,0)});
