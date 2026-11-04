@@ -24,3 +24,14 @@ jobs:
         run: npm test
       - name: Production build
         run: npm run build
+      - name: Install Chromium for browser acceptance tests
+        run: npx playwright install --with-deps chromium
+      - name: Desktop and mobile browser acceptance
+        run: npm run test:e2e
+      - name: Keep browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pharmuse-v11-browser-evidence
+          path: qa-results/
+          retention-days: 7
