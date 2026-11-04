@@ -45,7 +45,7 @@ export function checkCheckpoint(state:EngineState,lesson:EngineLesson,now=Date.n
  const s=state.sessions[lesson.id],step=s&&lesson.steps[s.cursor];
  if(!s||s.finished||!step||(step.kind!=='checkpoint'&&step.kind!=='apply')||s.checked.includes(step.question.id)||!validAnswer(step.question,s.responses[step.question.id]))return state;
  const correct=grade(step.question,s.responses[step.question.id]);
- const performance=[...state.performance,{sessionId:s.id,questionId:step.question.id,correct}].slice(-100);
+ const performance=[...state.performance,{sessionId:s.id,questionId:step.question.id,correct,at:now}].slice(-100);
  const old=state.progress[lesson.id];
  return {...state,performance,level:assessLevel(performance.map(x=>x.correct),state.level),progress:correct?state.progress:{...state.progress,[lesson.id]:{bestScore:old?.bestScore??0,lastScore:old?.lastScore??0,retainedReviews:old?.retainedReviews??0,dueAt:now,reviewInterval:0,retentionDueAt:old?.retentionDueAt??now+DAY,...(old?.completedAt?{completedAt:old.completedAt}:{})}},sessions:{...state.sessions,[lesson.id]:{...s,checked:[...s.checked,step.question.id],updatedAt:now}}};
 }
@@ -102,4 +102,9 @@ export function validatePublication(lesson:EngineLesson,approvedSources:readonly
  for(const step of lesson.steps)if(!step.citations.length||!step.title.en||!step.title.ar)issues.push('Step localization/source missing: '+step.id);
  for(const ref of [...lesson.steps.flatMap(s=>s.citations),...contentQuestions(lesson).flatMap(q=>q.citations)])if(!approvedSources.includes(ref.sourceId))issues.push('Source clearance missing: '+ref.sourceId);
  if(!lesson.steps.some(s=>s.kind==='final'))issues.push('Final exam missing');return issues;
+}
+
+export function todayCompletions(state:EngineState,now=new Date()){
+ const start=new Date(now);start.setHours(0,0,0,0);
+ return Object.values(state.progress).filter(p=>p.completedAt&&p.completedAt>=start.getTime()&&p.completedAt<=now.getTime()).length;
 }
