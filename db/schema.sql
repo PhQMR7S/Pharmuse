@@ -88,7 +88,7 @@ revoke all on function private.guard_publication() from public,anon,authenticate
 create trigger require_approved_source before insert or update on public.lessons for each row execute function private.guard_publication();
 
 -- A thin authenticated RPC wrapper calls an internal privileged operation. Caller ownership,
--- published content, prerequisite completion, answer bounds and attempt idempotency are enforced.
+-- published content, answer bounds and attempt idempotency are enforced.
 create function private.submit_answer(p_attempt uuid,p_question uuid,p_answer int) returns jsonb
 language plpgsql security definer set search_path='' as $$
 declare uid uuid:=auth.uid(); q private.questions; l public.lessons; previous public.attempts; r public.reviews; ok boolean; n int; days int;
@@ -105,8 +105,8 @@ begin
  if not found then raise exception 'Unknown question'; end if;
  select * into l from public.lessons where id=q.lesson_id and status='published';
  if not found then raise exception 'Lesson unavailable'; end if;
+ -- V1.1: prerequisite order is a recommendation, never an access restriction.
  if p_answer is null or p_answer<0 or p_answer>=jsonb_array_length(q.options) then raise exception 'Invalid answer'; end if;
- if exists(select 1 from public.lessons x where x.unit_id=l.unit_id and x.position<l.position and x.status='published' and not exists(select 1 from public.completions c where c.user_id=uid and c.lesson_id=x.id)) then raise exception 'Prerequisite incomplete'; end if;
  ok:=p_answer=q.correct_index;
  insert into public.attempts(id,user_id,question_id,correct) values(p_attempt,uid,p_question,ok);
  select * into r from public.reviews where user_id=uid and lesson_id=l.id;

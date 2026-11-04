@@ -7,3 +7,7 @@ out/
 .DS_Store
 # Private connected scientific-library metadata must not be published.
 data/source-inventory.json
+
+qa-results/
+playwright-report/
+test-results/
