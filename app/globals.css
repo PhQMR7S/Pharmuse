@@ -17,3 +17,26 @@ body{background:radial-gradient(ellipse at 85% 0%,#fbe1fa 0,transparent 45%),#f8
 @media(max-width:700px){.shell{padding:8px 12px 92px}.header{top:0;border-radius:0 0 18px 18px;padding:10px 12px}.logo{font-size:1.1rem}.nav{position:fixed;bottom:0;left:0;right:0;background:#fffffff5;backdrop-filter:blur(18px);box-shadow:0 -8px 25px #3f1c7220;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:8px 3px max(8px,env(safe-area-inset-bottom));z-index:100}.nav button{font-size:.69rem;padding:9px 2px;white-space:normal}.dark .nav{background:#251a35f5}.hero{padding:24px 18px;min-height:290px;display:grid;grid-template-columns:minmax(0,1fr) 115px;gap:4px}.hero h1{font-size:clamp(1.65rem,7vw,2.7rem)}.hero p{font-size:.87rem}.hero .mascot{display:flex}.hero .mascot button{width:115px!important}.stats{gap:8px}.stats .card{padding:12px 6px}.stat strong{font-size:1.4rem}.gamepath>div:nth-child(even){transform:translateX(20px)}.gamepath>div:nth-child(odd){transform:translateX(-20px)}}
 @media(max-width:360px){.hero{grid-template-columns:1fr}.hero .mascot{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.legacy-summary{display:none}
+.dash{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(270px,.85fr);gap:20px;align-items:start;margin:24px 0}
+.dash-primary,.dash-aside{min-width:0;display:grid;gap:18px}
+.greeting{display:flex;align-items:center;gap:16px;background:#ffffffbd;border:1px solid #e8d9fa;border-radius:22px;padding:10px 18px}
+.greeting h2{font-size:clamp(1.15rem,2.2vw,1.6rem);margin:4px 0;color:#2d1758}.greeting p{margin:4px 0;color:#76668d}.eyebrow{font-size:.72rem;letter-spacing:.06em;font-weight:850;color:#8b5cf6!important}
+.daily-streak{margin-inline-start:auto;white-space:nowrap;background:#fff2db;border-radius:16px;padding:12px;font-size:.8rem;font-weight:800;color:#9a4a0d}
+.journey-card,.topics-card,.aside-card{background:#ffffffed;border:1px solid #e6d7f8;border-radius:23px;padding:24px;box-shadow:0 12px 30px #4d25840e}
+.journey-card{background:linear-gradient(125deg,#fefcff,#f4eaff 75%,#ffedf8)}
+.journey-top,.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.journey-card h2,.topics-card h2,.aside-card h2{margin:5px 0 16px;font-size:1.3rem}
+.journey-card p{color:#746486}.level-badge{background:#fff1b6;color:#875306;border-radius:15px;padding:10px 14px;font-weight:900;white-space:nowrap}
+.journey-card .primary{margin-top:8px}
+.section-head span{color:#8b5cf6;font-size:.82rem;font-weight:750}
+.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.topic-grid button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px solid #eadcf9;border-radius:17px;background:linear-gradient(145deg,#fce6f6,#f2eaff);padding:18px 8px;font-weight:800;color:#4a267d;min-height:115px}
+.topic-grid button:nth-child(2){background:linear-gradient(145deg,#e7f5ff,#eee8ff)}.topic-grid button:nth-child(3){background:linear-gradient(145deg,#e8fff5,#f2eaff)}
+.topic-grid button span{font-size:2rem}
+.aside-card p{color:#76668d}.secondary-cta{border:0;border-radius:13px;background:#ede3ff;color:#5c21af;font-weight:800;padding:12px 16px;margin-top:14px}
+.mascot-card{text-align:center}.mascot-card>button{margin:auto}.reward-count{font-weight:900;color:#6d28d9;font-size:1.2rem}
+.dark .greeting,.dark .journey-card,.dark .topics-card,.dark .aside-card{background:#281d38;border-color:#4b3863}.dark .greeting h2{color:#f8f3ff}.dark .journey-card p,.dark .aside-card p{color:#c5b4d9}
+@media(max-width:800px){.dash{grid-template-columns:1fr}.dash-aside{grid-template-columns:repeat(2,minmax(0,1fr))}.daily-streak{display:none}}
+@media(max-width:520px){.dash{gap:12px;margin:14px 0}.dash-primary,.dash-aside{gap:12px}.dash-aside{grid-template-columns:1fr}.greeting{padding:8px 12px;gap:6px}.greeting>button{width:70px!important;flex-shrink:0}.greeting h2{font-size:1.05rem}.greeting p{font-size:.78rem}.journey-card,.topics-card,.aside-card{padding:17px}.topic-grid{gap:7px}.topic-grid button{font-size:.69rem;padding:10px 3px;min-height:95px}.topic-grid button span{font-size:1.6rem}}
