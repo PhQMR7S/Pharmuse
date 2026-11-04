@@ -22,14 +22,15 @@ export function assessLevel(samples:boolean[],fallback:Level):Level{
  return rate<.5?'beginner':rate>=.85?'advanced':'intermediate';
 }
 export function mastery(state:EngineState,id:string){const p=state.progress[id];if(!p?.completedAt)return 'not-completed';if(p.bestScore>=85&&p.retainedReviews>=2)return 'mastered';if(p.bestScore>=70)return 'proficient';return 'completed'}
-export function lessonAccess(lesson:EngineLesson,options:{editorialPreview:boolean;entitled:boolean}){
+export function lessonAccess(lesson:EngineLesson,options:{editorialPreview:boolean;entitled:boolean;approvedSources?:string[]}){
  if(!options.entitled)return {allowed:false,reason:'entitlement'} as const;
- if(lesson.status!=='published'&&!options.editorialPreview)return {allowed:false,reason:'scientific-review'} as const;
- return {allowed:true,reason:lesson.status==='published'?'published':'editorial-preview'} as const;
+ if((lesson.status!=='published'||validatePublication(lesson,options.approvedSources).length>0)&&!options.editorialPreview)return {allowed:false,reason:'scientific-review'} as const;
+ return {allowed:true,reason:lesson.status==='published'&&validatePublication(lesson,options.approvedSources).length===0?'published':'editorial-preview'} as const;
 }
 export function recommendation(state:EngineState,lessons:EngineLesson[]){return [...lessons].sort((a,b)=>a.position-b.position).find(l=>mastery(state,l.id)==='not-completed'||mastery(state,l.id)==='completed')??lessons.find(l=>mastery(state,l.id)!=='mastered')??lessons[0]}
 export function openSession(state:EngineState,lesson:EngineLesson,id:string,now=Date.now(),mode:'learn'|'review'='learn',restart=false):EngineState{
  const old=state.sessions[lesson.id];
+ if(state.results.some(r=>r.sessionId===id)||Object.values(state.sessions).some(s=>s.id===id&&s.lessonId!==lesson.id))return state;
  const session:Session=!restart&&old&&old.contentVersion===lesson.version&&!old.finished&&old.mode===mode?old:{id,lessonId:lesson.id,contentVersion:lesson.version,mode,cursor:0,visited:[lesson.steps[0].id],responses:{},checked:[],examSubmitted:false,finished:false,retentionEligible:mode==='review'&&!!state.progress[lesson.id]?.completedAt&&now>=state.progress[lesson.id].dueAt&&now>=(state.progress[lesson.id].retentionDueAt??Infinity),startedAt:now,updatedAt:now};
  return {...state,selectedLessonId:lesson.id,sessions:{...state.sessions,[lesson.id]:session}};
 }
@@ -75,7 +76,7 @@ export function advance(state:EngineState,lesson:EngineLesson,now=Date.now()):En
  }
  const cursor=s.cursor+1;return {...state,sessions:{...state.sessions,[lesson.id]:{...s,cursor,visited:[...new Set([...s.visited,lesson.steps[cursor].id])],updatedAt:now}}};
 }
-export function back(state:EngineState,lesson:EngineLesson){const s=state.sessions[lesson.id];if(!s||s.cursor===0||s.finished)return state;return {...state,sessions:{...state.sessions,[lesson.id]:{...s,cursor:s.cursor-1}}}}
+export function back(state:EngineState,lesson:EngineLesson){const s=state.sessions[lesson.id];if(!s||s.cursor===0||s.finished||(lesson.steps[s.cursor].kind==='final'&&!s.examSubmitted))return state;return {...state,sessions:{...state.sessions,[lesson.id]:{...s,cursor:s.cursor-1}}}}
 export function engineXP(state:EngineState){return state.rewarded.length*20}
 export function hydrateEngine(input:unknown,lessons:EngineLesson[]):EngineState{
  // Local records are never treated as server-authoritative; reject malformed state and stale sessions.
@@ -94,10 +95,11 @@ export function hydrateEngine(input:unknown,lessons:EngineLesson[]):EngineState{
  return {...INITIAL_ENGINE,sessions,progress,results,performance,rewarded:[...new Set(Array.isArray(v.rewarded)?v.rewarded.filter(id=>ids.has(id)&&progress[id]?.completedAt&&progress[id].bestScore>=70):[])],level:['beginner','intermediate','advanced'].includes(v.level)?v.level:'beginner',explanation:['auto','simple','detailed','clinical'].includes(v.explanation)?v.explanation:'auto',navigation:v.navigation==='explore'?'explore':'guided',selectedLessonId:ids.has(v.selectedLessonId??'')?v.selectedLessonId:undefined};
  }catch{return {...INITIAL_ENGINE}}
 }
-export function validatePublication(lesson:EngineLesson){
+export function validatePublication(lesson:EngineLesson,approvedSources:readonly string[]=[]){
  const issues:string[]=[];if(!lesson.reviewedBy||!lesson.reviewedAt)issues.push('Scientific sign-off missing');
  if(lesson.steps.length<8||lesson.steps.length>12)issues.push('Expected 8–12 steps');
  const seen=new Set<string>();for(const q of contentQuestions(lesson)){if(seen.has(q.id))issues.push('Duplicate question id');seen.add(q.id);if(!q.reviewedBy||!q.reviewedAt)issues.push('Question approval missing: '+q.id);if(!q.prompt.en||!q.prompt.ar||!q.explanation.en||!q.explanation.ar||!q.citations.length)issues.push('Question localization/source missing: '+q.id)}
  for(const step of lesson.steps)if(!step.citations.length||!step.title.en||!step.title.ar)issues.push('Step localization/source missing: '+step.id);
+ for(const ref of [...lesson.steps.flatMap(s=>s.citations),...contentQuestions(lesson).flatMap(q=>q.citations)])if(!approvedSources.includes(ref.sourceId))issues.push('Source clearance missing: '+ref.sourceId);
  if(!lesson.steps.some(s=>s.kind==='final'))issues.push('Final exam missing');return issues;
 }
