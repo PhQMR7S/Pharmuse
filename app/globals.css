@@ -48,3 +48,5 @@ body{background:radial-gradient(ellipse at 85% 0%,#fbe1fa 0,transparent 45%),#f8
 .mascot-coach-message{min-width:0;flex:1}.coach-name{font-size:.78rem;font-weight:900;color:#6734b5}.mascot-coach-message p{font-size:1rem;font-weight:750;line-height:1.55;margin:6px 0;color:#322052}
 .dark .mascot-coach{background:linear-gradient(120deg,#1c3c56,#382448);border-color:#5e4a7c}.dark .mascot-coach-message p{color:#fff}.dark .coach-name{color:#d7b9ff}
 @media(max-width:520px){.mascot-coach{padding:9px;gap:5px}.mascot-coach>button{width:75px!important}.mascot-coach-message p{font-size:.84rem}.coach-name{font-size:.7rem}}
+
+.review-explainer{padding:13px 16px;background:#f3eaff;border-radius:14px;line-height:1.6}.review-pill{display:inline-flex;background:#e6f8ed;color:#17623b;font-weight:800;border-radius:20px;padding:7px 12px;font-size:.76rem;margin:6px}.dark .review-explainer{background:#38254e}.dark .review-pill{background:#234638;color:#d4fce7}
