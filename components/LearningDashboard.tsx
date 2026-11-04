@@ -1,0 +1,13 @@
+'use client';
+import CapsuleMascot from './CapsuleMascot';
+type Props={ar:boolean;completed:number;total:number;xp:number;onStart:()=>void;onReview:()=>void};
+export default function LearningDashboard({ar,completed,total,xp,onStart,onReview}:Props){
+const t=(en:string,arabic:string)=>ar?arabic:en;const percent=Math.round(completed/Math.max(total,1)*100);
+return <div className="dash">
+<div className="dash-primary">
+<section className="greeting"><CapsuleMascot size={100}/><div><p className="eyebrow">{t('YOUR LEARNING JOURNEY','رحلتك التعليمية')}</p><h2>{t('Hello, future pharmacist!','أهلاً يا صيدلي المستقبل!')} <span>✨</span></h2><p>{t('Ready for your daily dose of knowledge?','مستعد لجرعتك اليومية من المعرفة؟')}</p></div><span className="daily-streak">🔥 {t('Keep going!','واصل!')}</span></section>
+<section className="journey-card"><div className="journey-top"><div><p className="eyebrow">{t('WORLD 1 · GENERAL PHARMACOLOGY','العالم الأول · الفارما العامة')}</p><h2>{t('Your learning adventure','مغامرتك التعليمية')}</h2></div><span className="level-badge">⭐ {completed}/{total}</span></div><div className="meter"><div style={{width:percent+'%'}}/></div><p>{t('Master one mechanism at a time.','أتقن كل آلية خطوة بخطوة.')}</p><button className="primary" onClick={onStart}>{t('Continue learning','تابع التعلم')} ↗</button></section>
+<section className="topics-card"><div className="section-head"><h2>{t('Explore topics','استكشف المواضيع')}</h2><span>{t('Discover more','اكتشف المزيد')}</span></div><div className="topic-grid"><button onClick={onStart}><span>💊</span>{t('Pharmacology','علم الأدوية')}</button><button onClick={onStart}><span>🧬</span>{t('Pharmacokinetics','الحركية الدوائية')}</button><button onClick={onStart}><span>🧪</span>{t('Drug Mechanisms','آليات الأدوية')}</button></div></section>
+</div>
+<aside className="dash-aside"><section className="aside-card"><div className="section-head"><h2>🎯 {t("Today's goal",'هدف اليوم')}</h2><span>+20 XP</span></div><p>{t('Complete one interactive lesson','أكمل درساً تفاعلياً واحداً')}</p><div className="meter"><div style={{width:percent+'%'}}/></div><button className="secondary-cta" onClick={onStart}>{t("Let's learn!",'هيا نتعلم!')}</button></section><section className="aside-card mascot-card"><CapsuleMascot mood="celebrate" size={120}/><h2>🏆 {t('Rewards & achievements','المكافآت والإنجازات')}</h2><p>{t('Small steps, big discoveries!','خطوات صغيرة، اكتشافات كبيرة!')}</p><div className="reward-count">💎 {xp} XP</div><button className="secondary-cta" onClick={onReview}>{t('Review lessons','مراجعة الدروس')}</button></section></aside></div>
+}
