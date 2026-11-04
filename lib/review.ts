@@ -1,0 +1,5 @@
+export type ReviewEntry={lessonId:string;dueAt:number;intervalDays:number;repetitions:number;lastCorrect:boolean};
+const KEY='pharmuse-review-v1';
+export function readReviews():ReviewEntry[]{try{const raw=localStorage.getItem(KEY);if(!raw)return [];const parsed:unknown=JSON.parse(raw);if(!Array.isArray(parsed))return [];return parsed.filter((x):x is ReviewEntry=>x&&typeof x==='object'&&typeof x.lessonId==='string'&&Number.isFinite(x.dueAt)&&Number.isFinite(x.intervalDays)&&Number.isFinite(x.repetitions)&&typeof x.lastCorrect==='boolean')}catch{return []}}
+export function scheduleReview(entries:ReviewEntry[],lessonId:string,correct:boolean,now=Date.now()):ReviewEntry[]{const old=entries.find(e=>e.lessonId===lessonId);const repetitions=correct?(old?.repetitions??0)+1:0;const intervalDays=correct?Math.min(30,repetitions===1?1:repetitions===2?3:Math.round((old?.intervalDays??3)*2)):0;const dueAt=correct?now+intervalDays*86400000:now;return [...entries.filter(e=>e.lessonId!==lessonId),{lessonId,dueAt,intervalDays,repetitions,lastCorrect:correct}]}
+export function saveReviews(entries:ReviewEntry[]){try{localStorage.setItem(KEY,JSON.stringify(entries))}catch{}}
