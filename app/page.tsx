@@ -1,5 +1,5 @@
-import CapsuleMascot from '@/components/CapsuleMascot';
 'use client';
+import CapsuleMascot from '@/components/CapsuleMascot';
 import {useEffect,useState} from 'react';
 import {lessons} from '@/lib/curriculum';
 import {completeLesson,initialProgress,readProgress,saveProgress,type Progress} from '@/lib/progress';
