@@ -42,3 +42,9 @@ body{background:radial-gradient(ellipse at 85% 0%,#fbe1fa 0,transparent 45%),#f8
 @media(max-width:520px){.dash{gap:12px;margin:14px 0}.dash-primary,.dash-aside{gap:12px}.dash-aside{grid-template-columns:1fr}.greeting{padding:8px 12px;gap:6px}.greeting>button{width:70px!important;flex-shrink:0}.greeting h2{font-size:1.05rem}.greeting p{font-size:.78rem}.journey-card,.topics-card,.aside-card{padding:17px}.topic-grid{gap:7px}.topic-grid button{font-size:.69rem;padding:10px 3px;min-height:95px}.topic-grid button span{font-size:1.6rem}}
 
 .quiz-status{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 8px;font-size:.82rem;font-weight:800;color:#7c3aed}.quiz-status span{background:#f1e8ff;padding:9px 13px;border-radius:13px}.pilly-button{transition:filter .2s}.pilly-button:hover{filter:drop-shadow(0 8px 14px #368cdd66)}.pilly-button:active{transform:scale(.97)}.dark .quiz-status span{background:#402958;color:#e9d7ff}
+
+.mascot-coach{display:flex;align-items:center;gap:12px;padding:12px 16px;margin:18px 0;background:linear-gradient(120deg,#eaf8ff,#f8eaff 68%,#fff1f8);border:1px solid #dcd2fa;border-radius:22px;box-shadow:0 10px 25px #5b35a012}
+.mascot-coach>button{flex-shrink:0;filter:drop-shadow(0 6px 10px #2773b633)}
+.mascot-coach-message{min-width:0;flex:1}.coach-name{font-size:.78rem;font-weight:900;color:#6734b5}.mascot-coach-message p{font-size:1rem;font-weight:750;line-height:1.55;margin:6px 0;color:#322052}
+.dark .mascot-coach{background:linear-gradient(120deg,#1c3c56,#382448);border-color:#5e4a7c}.dark .mascot-coach-message p{color:#fff}.dark .coach-name{color:#d7b9ff}
+@media(max-width:520px){.mascot-coach{padding:9px;gap:5px}.mascot-coach>button{width:75px!important}.mascot-coach-message p{font-size:.84rem}.coach-name{font-size:.7rem}}
