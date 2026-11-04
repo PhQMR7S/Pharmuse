@@ -1,28 +1,34 @@
-# Pharmuse 💜
+# Pharmuse
 
-An original, playful bilingual (Arabic/English) pharmacology learning prototype.
+A bilingual Arabic/English pharmacy learning experience built in the existing Next.js + TypeScript repository.
+
+The professional rebuild lives on `feature/pharmuse-professional-rebuild-2026-11-04`, based on `feature/capsule-mascot-redesign`. Original source assets and the legacy prototype are retained.
 
 ## Run
-Open `index.html` in a modern browser. No build step or credentials required.
 
-## Included in V1 prototype
-- Responsive home dashboard and lesson path
-- Three introductory pharmacology lessons with explanations and feedback
-- Lesson completion, XP and progress stored in browser localStorage
-- Review and progress pages
-- Arabic/English language toggle with RTL/LTR
-- Dark mode
-- Account screen **preview only** (disabled inputs; no credentials collected)
+```sh
+npm ci
+npm run dev
+```
 
-## Important limitations
-This is a **static prototype**, not a deployed production learning platform. It does not include real authentication, a backend, Google Drive content ingestion, AI tutoring, scientific review workflows, admin tools, or synchronized progress. Sample lesson content is illustrative and must be independently reviewed before publication. This is educational content, not clinical prescribing guidance.
+## Validate
 
-## Next implementation milestones
-1. Migrate to Next.js/TypeScript with tested components and accessibility checks.
-2. Set up Supabase Auth and PostgreSQL with row-level security and migrations.
-3. Build curriculum, lesson, question, answer-attempt, mastery and source-citation schemas.
-4. Audit the private Pharmuse Drive reference library for licensing, provenance, duplicates, editions and scientific accuracy; publish only approved original or licensed material.
-5. Build editorial/admin review, automated tests, staging and release pipelines.
-6. Deploy a preview and verify mobile/desktop behavior before production launch.
+```sh
+npm run typecheck
+npm test
+npm run build
+```
 
-The project is independent from Farmakon. Do not upload copyrighted reference books into this public repository.
+Landing, student dashboard, sequential editorial lessons, local spaced review, practice interaction demonstrations, category search, real local statistics/achievements, and preferences are implemented. QMR7S artwork is a still character with 2D motion treatments, not real-time 3D.
+
+## Operational status
+
+This is a development preview, not a complete production platform. All progress/rewards are browser-local and non-authoritative. Scientific sample lessons await independent approval. Dedicated Supabase creation was blocked by the free-project limit. Account forms and remote features are not activated. Full admin editing/user management is not implemented.
+
+`db/schema.sql` is an **unapplied design blueprint**, not an approved migration or a tested production security model. API routes fail closed without configuration. No service-role key is used in the client. Never import browser XP as trusted server progress.
+
+Copy `.env.example` only after an isolated backend is provisioned and integration-tested. Configure allowed auth redirect URLs, email delivery and staff provisioning before enabling accounts.
+
+Private Drive file identifiers and full source inventory are excluded from Git and public bundles. Never add complete protected books to public assets.
+
+See [Arabic rebuild report](docs/REBUILD-REPORT-AR.md), [audit](docs/REBUILD-AUDIT.md), [scientific review](docs/SCIENTIFIC-REVIEW.md), and [design system](docs/DESIGN-SYSTEM.md).
